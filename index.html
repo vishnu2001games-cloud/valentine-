@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Valentine 💖</title>
+<style>
+body { margin: 0; font-family: Arial, sans-serif; overflow: hidden; }
+.bg { min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; background: linear-gradient(135deg, #ffd1dc, #ffe6f0); }
+.card { background: white; width: 90%; max-width: 360px; border-radius: 20px; padding: 22px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.5s ease; }
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+h2 { margin-top: 5px; }
+.option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+.option { padding: 12px; border-radius: 15px; background: #fff0f5; border: 2px solid transparent; cursor: pointer; transition: 0.2s; font-weight: bold; }
+.option:hover { transform: scale(1.05); }
+.option.selected { border-color: #ff4d79; background: #ffe0eb; }
+button { margin-top: 15px; padding: 12px 20px; border-radius: 30px; border: none; background: #ff4d79; color: white; font-size: 16px; cursor: pointer; }
+.hidden { display: none; }
+.heart { position: absolute; bottom: -20px; font-size: 18px; animation: floatUp 6s linear infinite; opacity: 0.7; }
+@keyframes floatUp { from { transform: translateY(0); } to { transform: translateY(-110vh); } }
+.anime { width: 100%; border-radius: 15px; margin-top: 10px; animation: fadeZoom 0.6s ease; }
+@keyframes fadeZoom { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+#yesBtn { background: #ff4d79; color: white; animation: pulse 1.5s infinite; position: relative; z-index: 2; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,77,121,0.6); } 70% { box-shadow: 0 0 0 20px rgba(255,77,121,0); } 100% { box-shadow: 0 0 0 0 rgba(255,77,121,0); } }.date-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; } .date-cell { padding: 12px 5px; border-radius: 14px; background: #fff0f5; border: 2px solid transparent; cursor: pointer; font-weight: bold; transition: 0.2s; } .date-cell:hover { transform: scale(1.08); } .date-cell.selected { background: #ff4d79; color: white; } </style>
+
+</head>
+<body><audio id="clickSound" src="click.mp3"></audio> <audio id="successSound" src="success.mp3"></audio>
+
+<div class="bg" onclick="autoYes()"><!-- COVER PAGE --><div class="card" id="coverPage" onclick="event.stopPropagation()">
+<h2>Give me two minutes and I will make you smile 😊💖</h2>
+<p style="margin-top:10px;color:#777;">Tap below to begin the surprise</p>
+<button onclick="startJourney()">START 💘</button>
+</div><!-- FOOD PAGE --><div class="card hidden" id="foodPage" onclick="event.stopPropagation()">
+<h2>🍔 Choose Your Favorite Food 🍕</h2>
+<div class="option-grid">
+<div class="option" onclick="selectFood(this,'Burger')">Burger 🍔</div>
+<div class="option" onclick="selectFood(this,'Pizza')">Pizza 🍕</div>
+<div class="option" onclick="selectFood(this,'Biriyani')">Biriyani 🍗</div>
+<div class="option" onclick="selectFood(this,'Mandhi')">Mandhi 🍖</div>
+</div>
+<button onclick="goActivity()">Next ➜</button>
+</div><!-- ACTIVITY PAGE --><div class="card hidden" id="activityPage" onclick="event.stopPropagation()">
+<h2>🎮 Choose Your Favorite Activity 🎬</h2>
+<div class="option-grid">
+<div class="option" onclick="selectActivity(this,'Movies')">Movies 🎬</div>
+<div class="option" onclick="selectActivity(this,'Party')">Party 🎉</div>
+<div class="option" onclick="selectActivity(this,'Bowling')">Bowling 🎳</div>
+<div class="option" onclick="selectActivity(this,'Netflix')">Netflix 🍿</div>
+</div>
+<button onclick="goValentine()">Next ➜</button>
+</div><!-- VALENTINE PAGE --><div class="card hidden" id="valentinePage" onclick="event.stopPropagation()">
+<h2>💖 Will You Be My Valentine? 💖</h2>
+<p id="promiseText">I promise cute moments 😌✨</p>
+<div style="position: relative; height: 100px; margin-top: 15px;">
+<button onclick="acceptYes()" id="yesBtn">YES 💕</button>
+<button id="noBtn" onclick="moveNo()">NO 🙃</button>
+</div>
+</div><!-- DATE PAGE --><div class="card hidden" id="datePage" onclick="event.stopPropagation()">
+<h2>📅 When Are You Free?</h2>
+<p>Select a day for our date 💖</p>
+<div class="date-grid" id="calendar"></div>
+<button onclick="goMoodLast()">Next ➜</button>
+</div><!-- MOOD PAGE (NOW LAST STEP) --><div class="card hidden" id="moodPage" onclick="event.stopPropagation()">
+<h2>💫 How Should Our Date Feel?</h2>
+<div class="option-grid">
+<div class="option" onclick="selectMood(this,'Romantic')">Romantic 💑</div>
+<div class="option" onclick="selectMood(this,'Fun & Crazy')">Fun & Crazy 😂</div>
+<div class="option" onclick="selectMood(this,'Late Night Chill')">Late Night Chill 🌙</div>
+<div class="option" onclick="selectMood(this,'Cute & Flirty')">Cute & Flirty 🔥</div>
+</div>
+<button onclick="goEnding()">Finish 💖</button>
+</div><!-- ENDING PAGE --><div class="card hidden" id="finalPage" onclick="event.stopPropagation()">
+<h2>💞 It's A Date! 💞</h2>
+<p id="finalMsg"></p>
+<img src="zenitsu.jpg" class="anime" />
+<p style="margin-top:10px;color:#ff4d79;font-weight:bold;">Can't wait to see you 😘✨</p>
+</div></div><script>
+let selectedFood="", selectedActivity="", selectedMood="", chosenDate="";
+let yesScale=1;
+
+function startJourney(){ coverPage.classList.add('hidden'); foodPage.classList.remove('hidden'); }
+
+function selectFood(el,food){ document.querySelectorAll('#foodPage .option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected'); selectedFood=food; }
+function selectActivity(el,activity){ document.querySelectorAll('#activityPage .option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected'); selectedActivity=activity; }
+function selectMood(el,mood){ document.querySelectorAll('#moodPage .option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected'); selectedMood=mood; }
+
+function goActivity(){ if(!selectedFood) return alert('Pick your favorite food 😋'); foodPage.classList.add('hidden'); activityPage.classList.remove('hidden'); }
+
+function goValentine(){ if(!selectedActivity) return alert('Pick your favorite activity 🎉'); activityPage.classList.add('hidden'); valentinePage.classList.remove('hidden'); promiseText.innerText = `I promise to take you for ${selectedFood} 🍴 and enjoy ${selectedActivity} together 😌💖`; }
+
+function moveNo(){ let x=Math.random()*200-100; let y=Math.random()*200-100; noBtn.style.transform=`translate(${x}px,${y}px)`; yesScale+=0.08; yesBtn.style.transform=`scale(${yesScale})`; clickSound.play(); }
+
+function acceptYes(){ clickSound.play(); valentinePage.classList.add('hidden'); datePage.classList.remove('hidden'); generateCalendar(); }
+
+function generateCalendar(){
+const cal=document.getElementById('calendar');
+cal.innerHTML="";
+const today=new Date();
+for(let i=0;i<8;i++){
+const d=new Date();
+d.setDate(today.getDate()+i);
+const cell=document.createElement('div');
+cell.className='date-cell';
+cell.innerHTML=`${d.getDate()}/${d.getMonth()+1}<br><small>${d.toLocaleDateString('en-US',{weekday:'short'})}</small>`;
+cell.onclick=function(){ document.querySelectorAll('.date-cell').forEach(c=>c.classList.remove('selected')); cell.classList.add('selected'); chosenDate = d.toDateString(); };
+cal.appendChild(cell);
+}
+}
+
+function goMoodLast(){ if(!chosenDate) return alert('Pick a date 😌'); datePage.classList.add('hidden'); moodPage.classList.remove('hidden'); }
+
+function goEnding(){ if(!selectedMood) return alert('Pick a vibe 😘'); moodPage.classList.add('hidden'); finalPage.classList.remove('hidden'); finalMsg.innerText = `Food: ${selectedFood}\nActivity: ${selectedActivity}\nMood: ${selectedMood}\nDate: ${chosenDate}`; successSound.play(); }
+
+function autoYes(){ if(!valentinePage.classList.contains('hidden')) acceptYes(); }
+
+// Floating hearts
+setInterval(()=>{ const heart=document.createElement('div'); heart.className='heart'; heart.innerHTML='💗'; heart.style.left=Math.random()*100+'vw'; heart.style.fontSize=Math.random()*15+15+'px'; document.body.appendChild(heart); setTimeout(()=>heart.remove(),6000); },600);
+</script></body>
+</html>
